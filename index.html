@@ -3952,8 +3952,6 @@ async function imprimirTicket(tipo) {
                     padding: 3mm;
                     font-size: 10px;
                     line-height: 1.3;
-                    height: auto;
-                    overflow: hidden;
                 }
                 .header {
                     text-align: center;
@@ -3990,15 +3988,18 @@ async function imprimirTicket(tipo) {
                     padding: 1mm 0;
                     vertical-align: top;
                     overflow: hidden;
-                }
-                .producto {
                     white-space: nowrap;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    display: block;
                 }
-                td:nth-child(2) { text-align: right; padding-right: 2mm; }
-                td:nth-child(3) { text-align: right; }
+                td:nth-child(1) { 
+                    text-overflow: ellipsis;
+                }
+                td:nth-child(2) { 
+                    text-align: right; 
+                    padding-right: 2mm;
+                }
+                td:nth-child(3) { 
+                    text-align: right;
+                }
                 .totals {
                     margin-top: 3mm;
                     padding-top: 2mm;
@@ -4025,12 +4026,11 @@ async function imprimirTicket(tipo) {
                         width: 58mm;
                         margin: 0;
                         padding: 3mm;
-                        height: auto !important;
                     }
                 }
             </style>
         </head>
-        <body onload="window.print(); setTimeout(() => window.close(), 100);">
+        <body onload="window.print(); window.close();">
             <div class="header">
                 <div class="business-name">${businessName}</div>
                 <div class="ticket-type">TICKET DE ${tipo === 'venta' ? 'VENTA' : 'FIADO'}</div>
@@ -4052,7 +4052,7 @@ async function imprimirTicket(tipo) {
                 <tbody>
                     ${carrito.map(p => `
                         <tr>
-                            <td><span class="producto">${p.nombre.toUpperCase()}</span></td>
+                            <td>${p.nombre.toUpperCase()}</td>
                             <td>${p.cantidad}</td>
                             <td>${p.total.toFixed(2)}</td>
                         </tr>
@@ -4085,6 +4085,7 @@ async function imprimirTicket(tipo) {
     `);
     
     printWindow.document.close();
+    
 
     
     // Si es una venta, actualizar inventario y limpiar
