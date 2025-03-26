@@ -3933,7 +3933,6 @@ async function imprimirTicket(tipo) {
         document.getElementById('nombreClienteVenta').value || 'CLIENTE ANÓNIMO' : 
         document.getElementById('nombreClienteFiar').value;
     const totalBs = carrito.reduce((a, b) => a + b.total, 0);
-    const totalUsd = (totalBs / tasaDolar).toFixed(2);
     const businessName = document.getElementById('businessName').textContent.toUpperCase();
     const fecha = new Date().toLocaleString();
     
@@ -3968,23 +3967,35 @@ async function imprimirTicket(tipo) {
                     font-size: 11px;
                 }
                 .info {
+                    margin-bottom: 4mm;
+                }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
                     margin-bottom: 3mm;
                 }
-                .products-list {
-                    margin-bottom: 3mm;
+                th {
+                    text-align: left;
+                    padding: 1mm 0;
+                    border-bottom: 1px dashed #000;
                 }
-                .product-item {
+                td {
+                    padding: 1mm 0;
+                    vertical-align: top;
+                }
+                .producto {
                     display: flex;
-                    justify-content: space-between;
-                    margin-bottom: 1mm;
                 }
-                .product-name {
-                    flex: 1;
-                    white-space: normal;
+                .cantidad {
+                    width: 8mm;
+                    margin-right: 2mm;
                 }
-                .product-price {
+                .nombre {
+                    flex-grow: 1;
+                }
+                .precio {
+                    width: 20mm;
                     text-align: right;
-                    margin-left: 2mm;
                 }
                 .totals {
                     margin-top: 3mm;
@@ -4027,27 +4038,31 @@ async function imprimirTicket(tipo) {
                 <div><strong>Cliente:</strong> ${cliente.toUpperCase()}</div>
             </div>
             
-            <div class="products-list">
-                ${carrito.map((p, index) => `
-                    <div class="product-item">
-                        <span class="product-name">${index + 1}) ${p.nombre.toUpperCase()}</span>
-                        <span class="product-price">${p.total.toFixed(2)} BS</span>
-                    </div>
-                `).join('')}
-            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th colspan="3">PRODUCTOS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${carrito.map((p, index) => `
+                        <tr>
+                            <td colspan="3">
+                                <div class="producto">
+                                    <div class="cantidad">${index + 1})</div>
+                                    <div class="nombre">${p.nombre.toUpperCase()}</div>
+                                    <div class="precio">${p.total.toFixed(2)} BS</div>
+                                </div>
+                            </td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
             
             <div class="totals">
-                <div class="total-row">
-                    <span>Subtotal:</span>
-                    <span>${totalBs.toFixed(2)} BS</span>
-                </div>
-                <div class="total-row">
-                    <span>Tasa USD:</span>
-                    <span>${tasaDolar.toFixed(2)} BS/USD</span>
-                </div>
                 <div class="total-row" style="font-weight: bold;">
                     <span>TOTAL:</span>
-                    <span>${totalBs.toFixed(2)} BS (${totalUsd} USD)</span>
+                    <span>${totalBs.toFixed(2)} BS</span>
                 </div>
             </div>
             
