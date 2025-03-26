@@ -3988,7 +3988,7 @@ async function imprimirTicket(tipo) {
                 }
                 .cantidad {
                     width: 8mm;
-                    margin-right: 2mm;
+                    margin-right: 1mm;
                 }
                 .nombre {
                     flex-grow: 1;
@@ -4045,11 +4045,11 @@ async function imprimirTicket(tipo) {
                     </tr>
                 </thead>
                 <tbody>
-                    ${carrito.map((p, index) => `
+                    ${carrito.map(p => `
                         <tr>
                             <td colspan="3">
                                 <div class="producto">
-                                    <div class="cantidad">${index + 1})</div>
+                                    <div class="cantidad">(${p.cantidad})</div>
                                     <div class="nombre">${p.nombre.toUpperCase()}</div>
                                     <div class="precio">${p.total.toFixed(2)} BS</div>
                                 </div>
