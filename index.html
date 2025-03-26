@@ -3949,42 +3949,47 @@ async function imprimirTicket(tipo) {
                     font-family: 'Courier New', monospace;
                     width: 58mm;
                     margin: 0;
-                    padding: 2mm;
+                    padding: 3mm;
                     font-size: 10px;
-                    line-height: 1.2;
+                    line-height: 1.3;
                 }
-                .header, .section {
+                .header {
                     text-align: center;
+                    font-weight: bold;
                     margin-bottom: 3mm;
-                    padding-bottom: 3mm;
+                    padding-bottom: 2mm;
                     border-bottom: 1px dashed #000;
                 }
                 .business-name {
                     font-size: 12px;
-                    font-weight: bold;
                     margin-bottom: 1mm;
                 }
-                .ticket-info {
+                .ticket-type {
+                    font-size: 11px;
+                }
+                .info {
                     margin-bottom: 3mm;
                 }
-                .item {
-                    margin-bottom: 2mm;
-                    padding-bottom: 2mm;
-                    border-bottom: 1px dashed #ccc;
+                .products-list {
+                    margin-bottom: 3mm;
                 }
-                .item-name {
-                    font-weight: bold;
-                }
-                .item-details {
+                .product-item {
                     display: flex;
                     justify-content: space-between;
-                    margin-top: 1mm;
+                    margin-bottom: 1mm;
+                }
+                .product-name {
+                    flex: 1;
+                    white-space: normal;
+                }
+                .product-price {
+                    text-align: right;
+                    margin-left: 2mm;
                 }
                 .totals {
-                    margin: 3mm 0;
-                    padding: 2mm 0;
+                    margin-top: 3mm;
+                    padding-top: 2mm;
                     border-top: 1px dashed #000;
-                    border-bottom: 1px dashed #000;
                 }
                 .total-row {
                     display: flex;
@@ -3993,7 +3998,9 @@ async function imprimirTicket(tipo) {
                 }
                 .footer {
                     text-align: center;
-                    margin-top: 2mm;
+                    margin-top: 3mm;
+                    padding-top: 2mm;
+                    border-top: 1px dashed #000;
                     font-size: 9px;
                 }
                 @media print {
@@ -4004,7 +4011,7 @@ async function imprimirTicket(tipo) {
                     body {
                         width: 58mm;
                         margin: 0;
-                        padding: 2mm;
+                        padding: 3mm;
                     }
                 }
             </style>
@@ -4012,22 +4019,19 @@ async function imprimirTicket(tipo) {
         <body onload="window.print(); window.close();">
             <div class="header">
                 <div class="business-name">${businessName}</div>
-                <div>TICKET DE ${tipo === 'venta' ? 'VENTA' : 'FIADO'}</div>
+                <div class="ticket-type">TICKET DE ${tipo === 'venta' ? 'VENTA' : 'FIADO'}</div>
             </div>
             
-            <div class="ticket-info">
+            <div class="info">
                 <div><strong>Fecha:</strong> ${fecha}</div>
                 <div><strong>Cliente:</strong> ${cliente.toUpperCase()}</div>
             </div>
             
-            <div class="section">
+            <div class="products-list">
                 ${carrito.map((p, index) => `
-                    <div class="item">
-                        <div class="item-name">(${index + 1}) ${p.nombre.toUpperCase()}</div>
-                        <div class="item-details">
-                            <span>${p.precioVentaBs.toFixed(2)} Bs × ${p.cantidad}</span>
-                            <span>${p.total.toFixed(2)} Bs</span>
-                        </div>
+                    <div class="product-item">
+                        <span class="product-name">${index + 1}) ${p.nombre.toUpperCase()}</span>
+                        <span class="product-price">${p.total.toFixed(2)} BS</span>
                     </div>
                 `).join('')}
             </div>
@@ -4035,15 +4039,15 @@ async function imprimirTicket(tipo) {
             <div class="totals">
                 <div class="total-row">
                     <span>Subtotal:</span>
-                    <span>${totalBs.toFixed(2)} Bs</span>
+                    <span>${totalBs.toFixed(2)} BS</span>
                 </div>
                 <div class="total-row">
                     <span>Tasa USD:</span>
-                    <span>${tasaDolar.toFixed(2)} Bs/USD</span>
+                    <span>${tasaDolar.toFixed(2)} BS/USD</span>
                 </div>
                 <div class="total-row" style="font-weight: bold;">
                     <span>TOTAL:</span>
-                    <span>${totalBs.toFixed(2)} Bs (${totalUsd} USD)</span>
+                    <span>${totalBs.toFixed(2)} BS (${totalUsd} USD)</span>
                 </div>
             </div>
             
@@ -4058,7 +4062,7 @@ async function imprimirTicket(tipo) {
     
     printWindow.document.close();
     
-   
+
     
   
 
