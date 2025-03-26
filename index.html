@@ -3927,7 +3927,7 @@ document.getElementById('nav-config').addEventListener('click', () => {
     
    
    
- async function imprimirTicket(tipo) {
+async function imprimirTicket(tipo) {
     const carrito = tipo === 'venta' ? carritoVenta : carritoFiar;
     const cliente = tipo === 'venta' ? 
         document.getElementById('nombreClienteVenta').value || 'CLIENTE ANÓNIMO' : 
@@ -3949,53 +3949,61 @@ document.getElementById('nav-config').addEventListener('click', () => {
                     font-family: 'Courier New', monospace;
                     width: 58mm;
                     margin: 0;
-                    padding: 2mm;
+                    padding: 3mm;
                     font-size: 10px;
-                    line-height: 1.2;
+                    line-height: 1.3;
                 }
                 .header {
                     text-align: center;
                     font-weight: bold;
-                    margin-bottom: 2mm;
+                    margin-bottom: 3mm;
+                    padding-bottom: 2mm;
+                    border-bottom: 1px dashed #000;
                 }
                 .business-name {
                     font-size: 12px;
+                    margin-bottom: 1mm;
                 }
                 .ticket-type {
-                    font-size: 10px;
+                    font-size: 11px;
                 }
                 .info {
-                    margin-bottom: 2mm;
+                    margin-bottom: 3mm;
                 }
                 table {
                     width: 100%;
                     border-collapse: collapse;
-                    margin-bottom: 2mm;
+                    margin-bottom: 3mm;
                 }
                 th {
                     text-align: left;
-                    border-bottom: 1px dashed #000;
                     padding: 1mm 0;
+                    border-bottom: 1px dashed #000;
                 }
+                th:nth-child(1) { width: 55%; }
+                th:nth-child(2) { width: 15%; text-align: right; padding-right: 2mm; }
+                th:nth-child(3) { width: 30%; text-align: right; }
                 td {
                     padding: 1mm 0;
                     vertical-align: top;
                 }
-                .right {
-                    text-align: right;
-                }
+                td:nth-child(2) { text-align: right; padding-right: 2mm; }
+                td:nth-child(3) { text-align: right; }
                 .totals {
-                    margin-top: 2mm;
-                    border-top: 1px dashed #000;
+                    margin-top: 3mm;
                     padding-top: 2mm;
+                    border-top: 1px dashed #000;
                 }
                 .total-row {
                     display: flex;
                     justify-content: space-between;
+                    margin-bottom: 1mm;
                 }
                 .footer {
                     text-align: center;
-                    margin-top: 2mm;
+                    margin-top: 3mm;
+                    padding-top: 2mm;
+                    border-top: 1px dashed #000;
                     font-size: 9px;
                 }
                 @media print {
@@ -4006,7 +4014,7 @@ document.getElementById('nav-config').addEventListener('click', () => {
                     body {
                         width: 58mm;
                         margin: 0;
-                        padding: 2mm;
+                        padding: 3mm;
                     }
                 }
             </style>
@@ -4018,24 +4026,24 @@ document.getElementById('nav-config').addEventListener('click', () => {
             </div>
             
             <div class="info">
-                <div>Fecha: ${fecha}</div>
-                <div>Cliente: ${cliente.toUpperCase()}</div>
+                <div><strong>Fecha:</strong> ${fecha}</div>
+                <div><strong>Cliente:</strong> ${cliente.toUpperCase()}</div>
             </div>
             
             <table>
                 <thead>
                     <tr>
                         <th>Producto</th>
-                        <th class="right">Cant.</th>
-                        <th class="right">Total</th>
+                        <th>Cant.</th>
+                        <th>Total</th>
                     </tr>
                 </thead>
                 <tbody>
                     ${carrito.map(p => `
                         <tr>
                             <td>${p.nombre.toUpperCase()}</td>
-                            <td class="right">${p.cantidad}</td>
-                            <td class="right">${p.total.toFixed(2)}</td>
+                            <td>${p.cantidad}</td>
+                            <td>${p.total.toFixed(2)}</td>
                         </tr>
                     `).join('')}
                 </tbody>
@@ -4066,6 +4074,7 @@ document.getElementById('nav-config').addEventListener('click', () => {
     `);
     
     printWindow.document.close();
+
     
     // Si es una venta, actualizar inventario y limpiar
     if (tipo === 'venta' && carritoVenta.length > 0) {
