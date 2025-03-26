@@ -3945,10 +3945,6 @@ async function imprimirTicket(tipo) {
         <head>
             <title>Ticket de ${tipo === 'venta' ? 'Venta' : 'Fiado'}</title>
             <style>
-                @page {
-                    size: auto;
-                    margin: 0mm;
-                }
                 body {
                     font-family: 'Courier New', monospace;
                     width: 58mm;
@@ -3956,6 +3952,8 @@ async function imprimirTicket(tipo) {
                     padding: 3mm;
                     font-size: 10px;
                     line-height: 1.3;
+                    height: auto;
+                    overflow: hidden;
                 }
                 .header {
                     text-align: center;
@@ -3985,6 +3983,9 @@ async function imprimirTicket(tipo) {
                     padding: 1mm 0;
                     border-bottom: 1px dashed #000;
                 }
+                th:nth-child(1) { width: 55%; }
+                th:nth-child(2) { width: 15%; text-align: right; padding-right: 2mm; }
+                th:nth-child(3) { width: 30%; text-align: right; }
                 td {
                     padding: 1mm 0;
                     vertical-align: top;
@@ -3994,15 +3995,10 @@ async function imprimirTicket(tipo) {
                     white-space: nowrap;
                     overflow: hidden;
                     text-overflow: ellipsis;
+                    display: block;
                 }
-                .cantidad {
-                    text-align: center;
-                    width: 15mm;
-                }
-                .total {
-                    text-align: right;
-                    width: 20mm;
-                }
+                td:nth-child(2) { text-align: right; padding-right: 2mm; }
+                td:nth-child(3) { text-align: right; }
                 .totals {
                     margin-top: 3mm;
                     padding-top: 2mm;
@@ -4020,9 +4016,21 @@ async function imprimirTicket(tipo) {
                     border-top: 1px dashed #000;
                     font-size: 9px;
                 }
+                @media print {
+                    @page {
+                        size: 58mm auto;
+                        margin: 0;
+                    }
+                    body {
+                        width: 58mm;
+                        margin: 0;
+                        padding: 3mm;
+                        height: auto !important;
+                    }
+                }
             </style>
         </head>
-        <body>
+        <body onload="window.print(); setTimeout(() => window.close(), 100);">
             <div class="header">
                 <div class="business-name">${businessName}</div>
                 <div class="ticket-type">TICKET DE ${tipo === 'venta' ? 'VENTA' : 'FIADO'}</div>
@@ -4036,17 +4044,17 @@ async function imprimirTicket(tipo) {
             <table>
                 <thead>
                     <tr>
-                        <th style="width: 60%">Producto</th>
-                        <th style="width: 15%">Cant.</th>
-                        <th style="width: 25%">Total</th>
+                        <th>Producto</th>
+                        <th>Cant.</th>
+                        <th>Total</th>
                     </tr>
                 </thead>
                 <tbody>
                     ${carrito.map(p => `
                         <tr>
-                            <td class="producto" title="${p.nombre.toUpperCase()}">${p.nombre.toUpperCase()}</td>
-                            <td class="cantidad">${p.cantidad}</td>
-                            <td class="total">${p.total.toFixed(2)}</td>
+                            <td><span class="producto">${p.nombre.toUpperCase()}</span></td>
+                            <td>${p.cantidad}</td>
+                            <td>${p.total.toFixed(2)}</td>
                         </tr>
                     `).join('')}
                 </tbody>
@@ -4072,13 +4080,6 @@ async function imprimirTicket(tipo) {
                 <div>${businessName}</div>
                 ${tipo === 'fiar' ? '<div style="font-weight: bold;">** FIADO - PENDIENTE DE PAGO **</div>' : ''}
             </div>
-
-            <script>
-                window.print();
-                setTimeout(function() {
-                    window.close();
-                }, 100);
-            </script>
         </body>
         </html>
     `);
